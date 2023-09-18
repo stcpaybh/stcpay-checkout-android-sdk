@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "stcPayCheckout"
 include(":stcPayCheckout")
-include(":validatesdk")

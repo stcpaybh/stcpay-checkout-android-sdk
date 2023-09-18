@@ -21,3 +21,12 @@ fun getHashedData(secretKey: String, data: String): String {
 
     return ""
 }
+
+object StcPayCheckoutSDKNotInitializedException : Exception(STC_PAY_CHECKOUT_SDK_EXCEPTION) {
+    private fun readResolve(): Any = StcPayCheckoutSDKNotInitializedException
+}
+
+object ActivityResultLauncherNotInitializedException :
+    Exception(ACTIVITY_RESULT_LAUNCHER_EXCEPTION) {
+    private fun readResolve(): Any = ActivityResultLauncherNotInitializedException
+}
