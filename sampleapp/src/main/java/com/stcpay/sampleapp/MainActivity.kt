@@ -31,8 +31,9 @@ class MainActivity : ComponentActivity() {
         // stcPayCheckoutSDK
         val stcPayCheckoutSDKConfiguration = StcPayCheckoutSDKConfiguration.Builder(this)
             .secretKey("secretKey")
-            .merchantId("merchantID")
-            .externalRefId("merchantID")
+            .merchantId("merchantId")
+            .merchantName("merchantName")
+            .externalRefId("externalRefId")
             .amount(2.0)
             .stcPayCheckoutResultListener(object : StcPayCheckoutResultListener {
                 override fun onSuccess() {}
