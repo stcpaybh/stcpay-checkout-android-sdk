@@ -50,46 +50,53 @@ object StcPayCheckoutSDK {
     }
 
     fun openStcPayApp() {
-        val hashedData = getHashedData(
-            stcPayCheckoutSDKConfiguration.secretKey,
-            "${stcPayCheckoutSDKConfiguration.merchantId}-${stcPayCheckoutSDKConfiguration.amount.getFormattedPrice()}-${stcPayCheckoutSDKConfiguration.externalRefId}"
-        )
+        if (this::stcPayCheckoutSDKConfiguration.isInitialized) {
+            val hashedData = getHashedData(
+                stcPayCheckoutSDKConfiguration.secretKey,
+                "${stcPayCheckoutSDKConfiguration.merchantId}-${stcPayCheckoutSDKConfiguration.amount.getFormattedPrice()}-${stcPayCheckoutSDKConfiguration.externalRefId}"
+            )
 
-        val packageManager = stcPayCheckoutSDKConfiguration.context.packageManager
+            val packageManager = stcPayCheckoutSDKConfiguration.context.packageManager
 
-        val isStcPayInstalled = try {
-            packageManager.getPackageInfo(STC_PAY_APP_PACKAGE_NAME, PackageManager.GET_ACTIVITIES)
-            true
-        } catch (e: PackageManager.NameNotFoundException) {
-            false
-        }
+            val isStcPayInstalled = try {
+                packageManager.getPackageInfo(
+                    STC_PAY_APP_PACKAGE_NAME,
+                    PackageManager.GET_ACTIVITIES
+                )
+                true
+            } catch (e: PackageManager.NameNotFoundException) {
+                false
+            }
 
-        if (isStcPayInstalled) {
-            val intent = packageManager.getLaunchIntentForPackage(STC_PAY_APP_PACKAGE_NAME)
+            if (isStcPayInstalled) {
+                val intent = packageManager.getLaunchIntentForPackage(STC_PAY_APP_PACKAGE_NAME)
 
-            if (intent != null) {
-                intent.putExtra(HASHED_DATA, hashedData)
+                if (intent != null) {
+                    intent.putExtra(HASHED_DATA, hashedData)
 
-                if (this::activityResultLauncher.isInitialized) {
-                    activityResultLauncher.launch(intent)
-                } else {
-                    throw ActivityResultLauncherNotInitializedException
+                    if (this::activityResultLauncher.isInitialized) {
+                        activityResultLauncher.launch(intent)
+                    } else {
+                        throw ActivityResultLauncherNotInitializedException
+                    }
+                }
+            } else {
+                try {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$STC_PAY_APP_PACKAGE_NAME")
+                    )
+                    stcPayCheckoutSDKConfiguration.context.startActivity(intent)
+                } catch (e: android.content.ActivityNotFoundException) {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=$STC_PAY_APP_PACKAGE_NAME")
+                    )
+                    stcPayCheckoutSDKConfiguration.context.startActivity(intent)
                 }
             }
         } else {
-            try {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=$STC_PAY_APP_PACKAGE_NAME")
-                )
-                stcPayCheckoutSDKConfiguration.context.startActivity(intent)
-            } catch (e: android.content.ActivityNotFoundException) {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$STC_PAY_APP_PACKAGE_NAME")
-                )
-                stcPayCheckoutSDKConfiguration.context.startActivity(intent)
-            }
+            throw StcPayCheckoutSDKNotInitializedException
         }
     }
 }
