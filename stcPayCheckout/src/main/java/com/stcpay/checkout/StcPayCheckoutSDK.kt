@@ -7,8 +7,12 @@ import android.net.Uri
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ContentInfoCompat.Flags
+import com.stcpay.checkout.utils.AMOUNT
 import com.stcpay.checkout.utils.ActivityResultLauncherNotInitializedException
+import com.stcpay.checkout.utils.EXTERNAL_REF_ID
 import com.stcpay.checkout.utils.HASHED_DATA
+import com.stcpay.checkout.utils.MERCHANT_ID
 import com.stcpay.checkout.utils.STC_PAY_APP_PACKAGE_NAME
 import com.stcpay.checkout.utils.StcPayCheckoutSDKNotInitializedException
 import com.stcpay.checkout.utils.getFormattedPrice
@@ -72,7 +76,13 @@ object StcPayCheckoutSDK {
                 val intent = packageManager.getLaunchIntentForPackage(STC_PAY_APP_PACKAGE_NAME)
 
                 if (intent != null) {
-                    intent.putExtra(HASHED_DATA, hashedData)
+                    intent.apply {
+                        flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+                        putExtra(MERCHANT_ID, stcPayCheckoutSDKConfiguration.merchantId)
+                        putExtra(EXTERNAL_REF_ID, stcPayCheckoutSDKConfiguration.externalRefId)
+                        putExtra(AMOUNT, stcPayCheckoutSDKConfiguration.amount)
+                        putExtra(HASHED_DATA, hashedData)
+                    }
 
                     if (this::activityResultLauncher.isInitialized) {
                         activityResultLauncher.launch(intent)

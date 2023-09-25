@@ -1,6 +1,9 @@
 package com.stcpay.checkout.utils
 
 const val HMAC_SHA_512 = "HmacSHA512"
+const val MERCHANT_ID = "MERCHANT_ID"
+const val EXTERNAL_REF_ID = "EXTERNAL_REF_ID"
+const val AMOUNT = "AMOUNT"
 const val HASHED_DATA = "HASHED_DATA"
 const val STC_PAY_APP_PACKAGE_NAME = "com.vivacash.sadad.uat"
 const val SECRET_KEY_EXCEPTION = "Secret Key must not be blank."
