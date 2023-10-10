@@ -1,6 +1,7 @@
 package com.stcpay.sampleapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -27,17 +28,27 @@ import com.stcpay.sampleapp.ui.theme.StcPayCheckoutTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context = this
 
         // stcPayCheckoutSDK
         val stcPayCheckoutSDKConfiguration = StcPayCheckoutSDKConfiguration.Builder(this)
-            .secretKey("secretKey")
-            .merchantId("merchantId")
+            .secretKey("9ec20e2b5bc569f37ad3df432b70dbb0eca39db68cd3be63d103f8ce9d1217bcef95d688334de74553f9df0c4e0171cc65f65e94c4beb8a3420cfed31ef2ab50")
+            .merchantId("1")
             .merchantName("merchantName")
-            .externalRefId("externalRefId")
-            .amount(2.0)
+            .externalRefId("${(1..10000).random()}")
+            .amount(500.0)
             .stcPayCheckoutResultListener(object : StcPayCheckoutResultListener {
-                override fun onSuccess() {}
-                override fun onFailure() {}
+                override fun onSuccess(transactionId: Long) {
+                    Toast.makeText(context, "Transaction Id: $transactionId", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onFailure(resultCode: Int, message: String) {
+                    Toast.makeText(
+                        context,
+                        "ResultCode: $resultCode, Message: $message",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             })
             .build()
 
