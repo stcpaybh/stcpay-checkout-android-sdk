@@ -1,6 +1,6 @@
 package com.stcpay.checkout
 
 interface StcPayCheckoutResultListener {
-    fun onSuccess()
-    fun onFailure()
+    fun onSuccess(transactionId: Long)
+    fun onFailure(resultCode: Int, message:String )
 }
