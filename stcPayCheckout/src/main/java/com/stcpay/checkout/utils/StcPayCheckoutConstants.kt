@@ -2,6 +2,7 @@ package com.stcpay.checkout.utils
 
 const val HMAC_SHA_512 = "HmacSHA512"
 const val MERCHANT_ID = "MERCHANT_ID"
+const val MERCHANT_NAME = "MERCHANT_NAME"
 const val EXTERNAL_REF_ID = "EXTERNAL_REF_ID"
 const val AMOUNT = "AMOUNT"
 const val HASHED_DATA = "HASHED_DATA"
@@ -15,3 +16,9 @@ const val STC_PAY_CHECKOUT_SDK_EXCEPTION =
     "StcPayCheckoutSDK must be initialized before performing this operation."
 const val ACTIVITY_RESULT_LAUNCHER_EXCEPTION =
     "ActivityResultLauncher must be initialized before performing this operation."
+
+const val CODE = "CODE"
+const val MESSAGE = "MESSAGE"
+const val TRANSACTION_ID = "TRANSACTION_ID"
+const val SUCCESS_CODE = 0
+
