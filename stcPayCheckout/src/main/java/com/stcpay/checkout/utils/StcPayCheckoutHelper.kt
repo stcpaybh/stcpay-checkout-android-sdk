@@ -1,11 +1,15 @@
 package com.stcpay.checkout.utils
 
+import android.os.Build
 import android.util.Base64
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
+import java.util.Locale
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.text.Charsets.UTF_8
+
+fun isHuaweiDevice() = Build.MANUFACTURER.lowercase(Locale.US) == "huawei"
 
 fun getHashedData(secretKey: String, data: String): String {
     try {
