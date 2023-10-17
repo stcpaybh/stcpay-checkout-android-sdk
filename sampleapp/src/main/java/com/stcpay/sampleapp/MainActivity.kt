@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
         val stcPayCheckoutSDKConfiguration = StcPayCheckoutSDKConfiguration.Builder(this)
             .secretKey("9ec20e2b5bc569f37ad3df432b70dbb0eca39db68cd3be63d103f8ce9d1217bcef95d688334de74553f9df0c4e0171cc65f65e94c4beb8a3420cfed31ef2ab50")
             .merchantId("1")
-            .merchantName("merchantName")
             .externalRefId("${(1..10000).random()}")
             .amount(500.0)
             .stcPayCheckoutResultListener(object : StcPayCheckoutResultListener {

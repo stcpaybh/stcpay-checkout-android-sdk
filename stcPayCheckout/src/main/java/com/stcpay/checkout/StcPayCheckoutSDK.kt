@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,9 +13,9 @@ import com.stcpay.checkout.utils.CODE
 import com.stcpay.checkout.utils.EXTERNAL_REF_ID
 import com.stcpay.checkout.utils.HASHED_DATA
 import com.stcpay.checkout.utils.MERCHANT_ID
-import com.stcpay.checkout.utils.MERCHANT_NAME
 import com.stcpay.checkout.utils.MESSAGE
 import com.stcpay.checkout.utils.STC_PAY_APP_PACKAGE_NAME
+import com.stcpay.checkout.utils.STC_PAY_APP_PACKAGE_NAME_UAT
 import com.stcpay.checkout.utils.SUCCESS_CODE
 import com.stcpay.checkout.utils.StcPayCheckoutSDKNotInitializedException
 import com.stcpay.checkout.utils.TRANSACTION_ID
@@ -51,7 +50,7 @@ object StcPayCheckoutSDK {
                                     resultCode!!, result.data!!.getStringExtra(
                                         MESSAGE
                                     ) ?: ""
-                                );
+                                )
                             }
                         }
                     }
@@ -76,35 +75,10 @@ object StcPayCheckoutSDK {
 
             val packageManager = stcPayCheckoutSDKConfiguration.context.packageManager
 
-            val isStcPayInstalled = try {
-                packageManager.getPackageInfo(
-                    STC_PAY_APP_PACKAGE_NAME,
-                    PackageManager.GET_ACTIVITIES
-                )
-                true
-            } catch (e: PackageManager.NameNotFoundException) {
-                false
-            }
-
-            if (isStcPayInstalled) {
-                val intent = packageManager.getLaunchIntentForPackage(STC_PAY_APP_PACKAGE_NAME)
-
-                if (intent != null) {
-                    intent.apply {
-                        flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
-                        putExtra(MERCHANT_ID, stcPayCheckoutSDKConfiguration.merchantId)
-                        putExtra(MERCHANT_NAME, stcPayCheckoutSDKConfiguration.merchantName)
-                        putExtra(EXTERNAL_REF_ID, stcPayCheckoutSDKConfiguration.externalRefId)
-                        putExtra(AMOUNT, stcPayCheckoutSDKConfiguration.amount)
-                        putExtra(HASHED_DATA, hashedData)
-                    }
-
-                    if (this::activityResultLauncher.isInitialized) {
-                        activityResultLauncher.launch(intent)
-                    } else {
-                        throw ActivityResultLauncherNotInitializedException
-                    }
-                }
+            if (isAppInstalled(packageManager, STC_PAY_APP_PACKAGE_NAME_UAT)) {
+                openApp(packageManager, STC_PAY_APP_PACKAGE_NAME_UAT, hashedData)
+            } else if (isAppInstalled(packageManager, STC_PAY_APP_PACKAGE_NAME)) {
+                openApp(packageManager, STC_PAY_APP_PACKAGE_NAME, hashedData)
             } else {
                 try {
                     val intent = Intent(
@@ -122,6 +96,42 @@ object StcPayCheckoutSDK {
             }
         } else {
             throw StcPayCheckoutSDKNotInitializedException
+        }
+    }
+
+    private fun openApp(
+        packageManager: PackageManager,
+        packageName: String,
+        hashedData: String
+    ) {
+        val intent = packageManager.getLaunchIntentForPackage(packageName)
+
+        if (intent != null) {
+            intent.apply {
+                flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+                putExtra(MERCHANT_ID, stcPayCheckoutSDKConfiguration.merchantId)
+                putExtra(EXTERNAL_REF_ID, stcPayCheckoutSDKConfiguration.externalRefId)
+                putExtra(AMOUNT, stcPayCheckoutSDKConfiguration.amount)
+                putExtra(HASHED_DATA, hashedData)
+            }
+
+            if (this::activityResultLauncher.isInitialized) {
+                activityResultLauncher.launch(intent)
+            } else {
+                throw ActivityResultLauncherNotInitializedException
+            }
+        }
+    }
+
+    private fun isAppInstalled(
+        packageManager: PackageManager,
+        packageName: String
+    ): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
         }
     }
 }
