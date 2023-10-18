@@ -81,7 +81,7 @@ Following are functions you need to call for SDK initialization:
 | secretKey() |Set the secret key | String | Yes | Should be non-null |
 | merchantId() | Set the merchant ID | String| Yes | Should be non-null |
 | externalRefId() | Set the orderID of your payment | String | Yes| Should be non-null |
-| amount() | Amount for that orderID | Double| Yes | false | Should be greater than 0 |
+| amount() | Amount for that orderID | Double| Yes | Should be greater than 0 |
 | stcPayCheckoutResultListener() | Listener for callback of success/failure | StcPayCheckoutResultListener | Yes | Should be non-null |
 
 #### Callback
