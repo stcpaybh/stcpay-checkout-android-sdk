@@ -13,4 +13,9 @@
         android:theme="@style/Theme.StcPayCheckout"
         tools:targetApi="31" />
 
+    <queries>
+        <package android:name="com.vivacash.sadad" />
+        <package android:name="com.vivacash.sadad.uat" />
+    </queries>
+
 </manifest>
