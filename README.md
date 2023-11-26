@@ -119,5 +119,66 @@ You can use them based on your own criteria for error handling.
 
 ```message : String``` which will be a String and you can use it based on your own criteria for error handling.
 
+## Inquire API
 
+Transactions processed from stc pay Checkout SDK can be verified through an API
+To inquire the status of a particular transaction you can use below API endpoint:
+
+##### Endpoint
+#### UAT
+https://api.uat.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+#### Pre-Prod
+https://api.pre-prod.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+#### Prod
+https://api.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+
+##### Request
+
+```
+{
+  "merchant-id": "<your merchant ID>",
+  "stcpay-transaction-id": <transaction ID received from successful transaction from stc pay checkout SDK>,
+  "hash": "<hash string created by you>"
+}
+```
+
+#### How to create hash
+You will create hash by encrypting a string using the secret key provided already.
+You can use the helper function
+```
+fun getHashedData(secretKey: String, data: String): String
+```
+declared in [StcPayCheckoutHelper.kt](https://github.com/stcpaybh/stcpay-checkout-android-sdk/blob/main/stcPayCheckout/src/main/java/com/stcpay/checkout/utils/StcPayCheckoutHelper.kt).
+
+Following are functions you need to call for SDK initialization:
+
+| Params |  Description | Type | Required | Default value |
+|:---|:---|:---|:---|:---|
+| secretKey |Pass the secret key provided already | String | Yes | Should be non-null |
+| data | String which you want to encrypt | String| Yes | Should be non-null |
+
+### How to create data
+You will create a data string as follow, merchant ID and stc pay transaction ID separated by dash(-):
+"<merchant-id>-<stcpay-transaction-id>"
+e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data string will be: **"1234-5678"**
+
+##### Response
+
+```
+{
+    "response-code": 0,
+    "response-message": "Paid"
+}
+```
+
+#### Response Code possible values
+
+| Values | 
+|:---|
+|0 - Paid|
+|1 - Unpaid|
+|2 - Merchant not found|
+|3 - Transaction not found|
+|4 - Hash not matched|
+|5 - There is some technical error|
 
