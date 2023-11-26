@@ -138,7 +138,7 @@ https://api.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
 {
   "merchant-id": "<your merchant ID>",
   "stcpay-transaction-id": <transaction ID received from successful transaction from stc pay checkout SDK>,
-  "hash": "<hash string created by you>"
+  "hash": "<URL encoded hashed string created by you>"
 }
 ```
 ##### Header
