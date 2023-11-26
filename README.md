@@ -141,6 +141,8 @@ https://api.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
   "hash": "<hash string created by you>"
 }
 ```
+##### Header
+client-secret : <**API secret** provided to you>
 
 #### How to create hash
 You will create hash by encrypting a string using the secret key provided already.
