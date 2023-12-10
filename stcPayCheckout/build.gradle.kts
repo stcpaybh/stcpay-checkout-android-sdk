@@ -1,7 +1,8 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    id("maven-publish")
 }
 
 android {
@@ -31,10 +32,32 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+}
+
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.github.stcpaybh"
+            artifactId = "stcpay-checkout-android-sdk"
+            version = "1.0.1"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
