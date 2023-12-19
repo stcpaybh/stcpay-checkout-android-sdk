@@ -44,8 +44,6 @@ To initialize the stc pay checkout SDK in your app, use below snippet in your ap
 StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
             .secretKey("") /* Secret key obtained from stc pay */
             .merchantId("") /* Merchat Id obtained from stc pay */
-            .externalRefId("") /* Your own orderId for that payment */
-            .amount() /* Amount for that payment */
             .stcPayCheckoutResultListener(object : StcPayCheckoutResultListener {
                 override fun onSuccess(transactionId: Long) {
                 }
@@ -55,9 +53,6 @@ StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
                 }
             })
             .build()
-
-StcPayCheckoutSDK.initialize(stcPayCheckoutSDKConfiguration)
-
 ```
 
 #### Proceed for payment
@@ -67,9 +62,13 @@ StcPayCheckoutSDKConfiguration must be initialized, otherwise it will throw exce
 StcPayCheckoutSDKNotInitializedException
 ```
 
-Call below line when you want to open the stc pay app
-```kotlin
-StcPayCheckoutSDK.openStcPayApp()
+Call below line when you want to open the stc pay app, please note that before calling this function you need to set the ```amount``` and ```externalRefId``` on the ```stcPayCheckoutSDKConfiguration``` object
+e.g.
+```
+stcPayCheckoutSDKConfiguration.amount = 1.0
+stcPayCheckoutSDKConfiguration.externalRefId = "<sample_ref_id>"
+
+StcPayCheckoutSDK.initialize(stcPayCheckoutSDKConfiguration)
 ```
 
 ###### Attributes
@@ -80,8 +79,6 @@ Following are functions you need to call for SDK initialization:
 |:---|:---|:---|:---|:---|
 | secretKey() |Set the secret key | String | Yes | Should be non-null |
 | merchantId() | Set the merchant ID | String| Yes | Should be non-null |
-| externalRefId() | Set the orderID of your payment | String | Yes| Should be non-null |
-| amount() | Amount for that orderID | Double| Yes | Should be greater than 0 |
 | stcPayCheckoutResultListener() | Listener for callback of success/failure | StcPayCheckoutResultListener | Yes | Should be non-null |
 
 #### Callback
@@ -114,6 +111,7 @@ In onFailure, you have 2 parameters
 |OtpLimitExceed = 7|
 |IncorrectOtp = 8|
 |TryCountExceed = 98|
+|Cancelled by user = -10|
 
 You can use them based on your own criteria for error handling.
 
@@ -137,7 +135,7 @@ https://api.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
 ```
 {
   "merchant-id": "<your merchant ID>",
-  "stcpay-transaction-id": <transaction ID received from successful transaction from stc pay checkout SDK>,
+  "external-transaction-id": <exteranl transaction ID of a merchant>,
   "hash": "<URL encoded hashed string created by you>"
 }
 ```
@@ -161,7 +159,7 @@ Following are functions you need to call for SDK initialization:
 
 ### How to create data
 You will create a data string as follow, merchant ID and stc pay transaction ID separated by dash(-):
-"<merchant-id>-<stcpay-transaction-id>"
+"<merchant-id>-<external-transaction-id>"
 e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data string will be: **"1234-5678"**
 
 ##### Response
