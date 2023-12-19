@@ -11,18 +11,11 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 34
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
     compileOptions {
@@ -44,7 +37,6 @@ android {
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
-    implementation(libs.material)
 }
 
 
@@ -53,7 +45,6 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.stcpaybh"
             artifactId = "stcpay-checkout-android-sdk"
-            version = "1.0.2"
 
             afterEvaluate {
                 from(components["release"])
