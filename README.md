@@ -124,11 +124,11 @@ To inquire the status of a particular transaction you can use below API endpoint
 
 ##### Endpoint
 #### UAT
-https://api.uat.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+https://api.uat.stcpay.com.bh/api/mobile/v1/customer/StcpayCheckout/InquireTransactionStatus
 #### Pre-Prod
-https://api.pre-prod.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+https://api.pre-prod.stcpay.com.bh/api/mobile/v1/customer/StcpayCheckout/InquireTransactionStatus
 #### Prod
-https://api.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+https://api.stcpay.com.bh/api/mobile/StcpayCheckout/v1/customer/InquireTransactionStatus
 
 ##### Request
 
