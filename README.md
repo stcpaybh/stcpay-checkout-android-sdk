@@ -123,12 +123,7 @@ Transactions processed from stc pay Checkout SDK can be verified through an API
 To inquire the status of a particular transaction you can use below API endpoint:
 
 ##### Endpoint (POST)
-#### UAT
-https://api.uat.stcpay.com.bh/api/mobile/v1/customer/StcpayCheckout/InquireTransactionStatus
-#### Pre-Prod
-https://api.pre-prod.stcpay.com.bh/api/mobile/v1/customer/StcpayCheckout/InquireTransactionStatus
-#### Prod
-https://api.stcpay.com.bh/api/mobile/v1/customer/StcpayCheckout/InquireTransactionStatus
+#### WILL SHARE WHEN REQUIRED
 
 ##### Request
 
