@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import com.stcpay.checkout.utils.AMOUNT
 import com.stcpay.checkout.utils.ActivityResultLauncherNotInitializedException
+import com.stcpay.checkout.utils.DATE_MILLISECONDS
 import com.stcpay.checkout.utils.EXTERNAL_REF_ID
 import com.stcpay.checkout.utils.HASHED_DATA
 import com.stcpay.checkout.utils.MERCHANT_ID
@@ -23,14 +24,6 @@ object StcPayCheckoutSDK {
         this.stcPayCheckoutSDKConfiguration = stcPayCheckoutSDKConfiguration
         this.stcPayCheckoutSDKConfiguration.validate()
         openStcPayApp()
-    }
-
-    fun getStcPayCheckoutSDKConfiguration(): StcPayCheckoutSDKConfiguration {
-        return if (this::stcPayCheckoutSDKConfiguration.isInitialized) {
-            this.stcPayCheckoutSDKConfiguration
-        } else {
-            throw StcPayCheckoutSDKNotInitializedException
-        }
     }
 
     private fun openStcPayApp() {
@@ -79,6 +72,7 @@ object StcPayCheckoutSDK {
                 putExtra(MERCHANT_ID, stcPayCheckoutSDKConfiguration.merchantId)
                 putExtra(EXTERNAL_REF_ID, stcPayCheckoutSDKConfiguration.externalRefId)
                 putExtra(AMOUNT, stcPayCheckoutSDKConfiguration.amount)
+                putExtra(DATE_MILLISECONDS, stcPayCheckoutSDKConfiguration.currentDate)
                 putExtra(HASHED_DATA, hashedData)
             }
 

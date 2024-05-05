@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.stcpay.checkout.utils.AMOUNT_EXCEPTION
 import com.stcpay.checkout.utils.CODE
+import com.stcpay.checkout.utils.CURRENT_DATE_EXCEPTION
 import com.stcpay.checkout.utils.EXTERNAL_REFERENCE_ID_EXCEPTION
 import com.stcpay.checkout.utils.MERCHANT_ID_EXCEPTION
 import com.stcpay.checkout.utils.MESSAGE
@@ -24,6 +25,7 @@ class StcPayCheckoutSDKConfiguration private constructor(
 
     var externalRefId: String? = null
     var amount: Double? = null
+    var currentDate: Long? = null
 
     init {
         if (secretKey.isBlank()) {
@@ -42,6 +44,10 @@ class StcPayCheckoutSDKConfiguration private constructor(
 
         if (amount == null || amount == 0.0) {
             throw IllegalArgumentException(AMOUNT_EXCEPTION)
+        }
+
+        if (currentDate == null || (currentDate ?: 0) <= 0) {
+            throw IllegalArgumentException(CURRENT_DATE_EXCEPTION)
         }
     }
 

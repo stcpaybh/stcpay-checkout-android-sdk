@@ -41,7 +41,7 @@ To initialize the stc pay checkout SDK in your app, use below snippet in your ap
 
 ```kotlin
 
-StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
+val stcPayCheckoutSDKConfiguration = StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
             .secretKey("") /* Secret key obtained from stc pay */
             .merchantId("") /* Merchat Id obtained from stc pay */
             .stcPayCheckoutResultListener(object : StcPayCheckoutResultListener {
@@ -62,24 +62,25 @@ StcPayCheckoutSDKConfiguration must be initialized, otherwise it will throw exce
 StcPayCheckoutSDKNotInitializedException
 ```
 
-Call below line when you want to open the stc pay app, please note that before calling this function you need to set the ```amount``` and ```externalRefId``` on the ```stcPayCheckoutSDKConfiguration``` object
+Call below line when you want to open the stc pay app, please note that before calling this function you need to set the ```amount```, ```externalRefId``` and ```currentDate``` on the ```stcPayCheckoutSDKConfiguration``` object
 e.g.
 ```
 stcPayCheckoutSDKConfiguration.amount = 1.0
 stcPayCheckoutSDKConfiguration.externalRefId = "<sample_ref_id>"
+stcPayCheckoutSDKConfiguration.currentDate = "<current date in milliseconds>"
 
-StcPayCheckoutSDK.initialize(stcPayCheckoutSDKConfiguration)
+stcPayCheckoutSDKConfiguration.initialize(stcPayCheckoutSDKConfiguration)
 ```
 
 ###### Attributes
 
 Following are functions you need to call for SDK initialization:
 
-| Function |  Description | Type | Required | Default value |
-|:---|:---|:---|:---|:---|
-| secretKey() |Set the secret key | String | Yes | Should be non-null |
-| merchantId() | Set the merchant ID | String| Yes | Should be non-null |
-| stcPayCheckoutResultListener() | Listener for callback of success/failure | StcPayCheckoutResultListener | Yes | Should be non-null |
+| Function                       | Description                              | Type                         | Required | Default value      |
+|:-------------------------------|:-----------------------------------------|:-----------------------------|:---------|:-------------------|
+| secretKey()                    | Set the secret key                       | String                       | Yes      | Should be non-null |
+| merchantId()                   | Set the merchant ID                      | String                       | Yes      | Should be non-null |
+| stcPayCheckoutResultListener() | Listener for callback of success/failure | StcPayCheckoutResultListener | Yes      | Should be non-null |
 
 #### Callback
 
@@ -96,22 +97,22 @@ In onFailure, you have 2 parameters
 
 ```resultCode : Int``` which can have following possible values:
 
-| Result Code values | 
-|:---|
-|Exception = 1|
-|SessionExpired = 2|
-|SessionMissing = 24|
-|InvalidGuid = 20|
-|CustomerProfileNotFound = 26|
-|InvalidParam = 35|
-|InsufficientBalance = 72|
-|IncorrectServiceId = 79|
-|TransactionRollback = 84|
-|InvalidType = 23|
-|OtpLimitExceed = 7|
-|IncorrectOtp = 8|
-|TryCountExceed = 98|
-|Cancelled by user = -10|
+| Result Code values           | 
+|:-----------------------------|
+| Exception = 1                |
+| SessionExpired = 2           |
+| SessionMissing = 24          |
+| InvalidGuid = 20             |
+| CustomerProfileNotFound = 26 |
+| InvalidParam = 35            |
+| InsufficientBalance = 72     |
+| IncorrectServiceId = 79      |
+| TransactionRollback = 84     |
+| InvalidType = 23             |
+| OtpLimitExceed = 7           |
+| IncorrectOtp = 8             |
+| TryCountExceed = 98          |
+| Cancelled by user = -10      |
 
 You can use them based on your own criteria for error handling.
 
@@ -147,10 +148,10 @@ declared in [StcPayCheckoutHelper.kt](https://github.com/stcpaybh/stcpay-checkou
 
 Following are functions you need to call for SDK initialization:
 
-| Params |  Description | Type | Required | Default value |
-|:---|:---|:---|:---|:---|
-| secretKey |Pass the secret key provided already | String | Yes | Should be non-null |
-| data | String which you want to encrypt | String| Yes | Should be non-null |
+| Params    | Description                          | Type   | Required | Default value      |
+|:----------|:-------------------------------------|:-------|:---------|:-------------------|
+| secretKey | Pass the secret key provided already | String | Yes      | Should be non-null |
+| data      | String which you want to encrypt     | String | Yes      | Should be non-null |
 
 ### How to create data
 You will create a data string as follow, merchant ID and external transaction ID separated by dash(-):
@@ -168,12 +169,12 @@ e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data st
 
 #### Response Code possible values
 
-| Values | 
-|:---|
-|0 - Paid|
-|1 - Unpaid|
-|2 - Merchant not found|
-|3 - Transaction not found|
-|4 - Hash not matched|
-|5 - There is some technical error|
+| Values                            | 
+|:----------------------------------|
+| 0 - Paid                          |
+| 1 - Unpaid                        |
+| 2 - Merchant not found            |
+| 3 - Transaction not found         |
+| 4 - Hash not matched              |
+| 5 - There is some technical error |
 

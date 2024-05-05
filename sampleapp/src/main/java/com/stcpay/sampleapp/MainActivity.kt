@@ -22,6 +22,7 @@ import com.stcpay.checkout.StcPayCheckoutResultListener
 import com.stcpay.checkout.StcPayCheckoutSDK
 import com.stcpay.checkout.StcPayCheckoutSDKConfiguration
 import com.stcpay.sampleapp.ui.theme.StcPayCheckoutTheme
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
 
@@ -76,8 +77,9 @@ class MainActivity : ComponentActivity() {
                             ),
                             onClick = {
 
-                                stcPayCheckoutSDKConfiguration.amount = 9.0
+                                stcPayCheckoutSDKConfiguration.amount = 1.0
                                 stcPayCheckoutSDKConfiguration.externalRefId = "${(1..10000).random()}"
+                                stcPayCheckoutSDKConfiguration.currentDate = Date().time
 
                                 StcPayCheckoutSDK.initialize(stcPayCheckoutSDKConfiguration)
                             },
