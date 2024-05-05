@@ -41,11 +41,9 @@ To initialize the stc pay checkout SDK in your app, use below snippet in your ap
 
 ```kotlin
 
-StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
+val stcPayCheckoutSDKConfiguration = StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
             .secretKey("") /* Secret key obtained from stc pay */
             .merchantId("") /* Merchat Id obtained from stc pay */
-            .externalRefId("") /* Your own orderId for that payment */
-            .amount() /* Amount for that payment */
             .stcPayCheckoutResultListener(object : StcPayCheckoutResultListener {
                 override fun onSuccess(transactionId: Long) {
                 }
@@ -55,9 +53,6 @@ StcPayCheckoutSDKConfiguration.Builder(this) /* this should be an activity */
                 }
             })
             .build()
-
-StcPayCheckoutSDK.initialize(stcPayCheckoutSDKConfiguration)
-
 ```
 
 #### Proceed for payment
@@ -67,22 +62,25 @@ StcPayCheckoutSDKConfiguration must be initialized, otherwise it will throw exce
 StcPayCheckoutSDKNotInitializedException
 ```
 
-Call below line when you want to open the stc pay app
-```kotlin
-StcPayCheckoutSDK.openStcPayApp()
+Call below line when you want to open the stc pay app, please note that before calling this function you need to set the ```amount```, ```externalRefId``` and ```currentDate``` on the ```stcPayCheckoutSDKConfiguration``` object
+e.g.
+```
+stcPayCheckoutSDKConfiguration.amount = 1.0
+stcPayCheckoutSDKConfiguration.externalRefId = "<sample_ref_id>"
+stcPayCheckoutSDKConfiguration.currentDate = "<current date in milliseconds>"
+
+stcPayCheckoutSDKConfiguration.initialize(stcPayCheckoutSDKConfiguration)
 ```
 
 ###### Attributes
 
 Following are functions you need to call for SDK initialization:
 
-| Function |  Description | Type | Required | Default value |
-|:---|:---|:---|:---|:---|
-| secretKey() |Set the secret key | String | Yes | Should be non-null |
-| merchantId() | Set the merchant ID | String| Yes | Should be non-null |
-| externalRefId() | Set the orderID of your payment | String | Yes| Should be non-null |
-| amount() | Amount for that orderID | Double| Yes | Should be greater than 0 |
-| stcPayCheckoutResultListener() | Listener for callback of success/failure | StcPayCheckoutResultListener | Yes | Should be non-null |
+| Function                       | Description                              | Type                         | Required | Default value      |
+|:-------------------------------|:-----------------------------------------|:-----------------------------|:---------|:-------------------|
+| secretKey()                    | Set the secret key                       | String                       | Yes      | Should be non-null |
+| merchantId()                   | Set the merchant ID                      | String                       | Yes      | Should be non-null |
+| stcPayCheckoutResultListener() | Listener for callback of success/failure | StcPayCheckoutResultListener | Yes      | Should be non-null |
 
 #### Callback
 
@@ -99,21 +97,22 @@ In onFailure, you have 2 parameters
 
 ```resultCode : Int``` which can have following possible values:
 
-| Result Code values | 
-|:---|
-|Exception = 1|
-|SessionExpired = 2|
-|SessionMissing = 24|
-|InvalidGuid = 20|
-|CustomerProfileNotFound = 26|
-|InvalidParam = 35|
-|InsufficientBalance = 72|
-|IncorrectServiceId = 79|
-|TransactionRollback = 84|
-|InvalidType = 23|
-|OtpLimitExceed = 7|
-|IncorrectOtp = 8|
-|TryCountExceed = 98|
+| Result Code values           | 
+|:-----------------------------|
+| Exception = 1                |
+| SessionExpired = 2           |
+| SessionMissing = 24          |
+| InvalidGuid = 20             |
+| CustomerProfileNotFound = 26 |
+| InvalidParam = 35            |
+| InsufficientBalance = 72     |
+| IncorrectServiceId = 79      |
+| TransactionRollback = 84     |
+| InvalidType = 23             |
+| OtpLimitExceed = 7           |
+| IncorrectOtp = 8             |
+| TryCountExceed = 98          |
+| Cancelled by user = -10      |
 
 You can use them based on your own criteria for error handling.
 
@@ -124,20 +123,15 @@ You can use them based on your own criteria for error handling.
 Transactions processed from stc pay Checkout SDK can be verified through an API
 To inquire the status of a particular transaction you can use below API endpoint:
 
-##### Endpoint
-#### UAT
-https://api.uat.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
-#### Pre-Prod
-https://api.pre-prod.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
-#### Prod
-https://api.stcpay.com.bh/api/mobile/StcpayCheckout/InquireTransactionStatus
+##### Endpoint (POST)
+#### WILL SHARE WHEN REQUIRED
 
 ##### Request
 
 ```
 {
   "merchant-id": "<your merchant ID>",
-  "stcpay-transaction-id": <transaction ID received from successful transaction from stc pay checkout SDK>,
+  "external-transaction-id": <exteranl transaction ID of a merchant>,
   "hash": "<URL encoded hashed string created by you>"
 }
 ```
@@ -154,14 +148,14 @@ declared in [StcPayCheckoutHelper.kt](https://github.com/stcpaybh/stcpay-checkou
 
 Following are functions you need to call for SDK initialization:
 
-| Params |  Description | Type | Required | Default value |
-|:---|:---|:---|:---|:---|
-| secretKey |Pass the secret key provided already | String | Yes | Should be non-null |
-| data | String which you want to encrypt | String| Yes | Should be non-null |
+| Params    | Description                          | Type   | Required | Default value      |
+|:----------|:-------------------------------------|:-------|:---------|:-------------------|
+| secretKey | Pass the secret key provided already | String | Yes      | Should be non-null |
+| data      | String which you want to encrypt     | String | Yes      | Should be non-null |
 
 ### How to create data
-You will create a data string as follow, merchant ID and stc pay transaction ID separated by dash(-):
-"<merchant-id>-<stcpay-transaction-id>"
+You will create a data string as follow, merchant ID and external transaction ID separated by dash(-):
+"<merchant-id>-<external-transaction-id>"
 e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data string will be: **"1234-5678"**
 
 ##### Response
@@ -175,12 +169,12 @@ e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data st
 
 #### Response Code possible values
 
-| Values | 
-|:---|
-|0 - Paid|
-|1 - Unpaid|
-|2 - Merchant not found|
-|3 - Transaction not found|
-|4 - Hash not matched|
-|5 - There is some technical error|
+| Values                            | 
+|:----------------------------------|
+| 0 - Paid                          |
+| 1 - Unpaid                        |
+| 2 - Merchant not found            |
+| 3 - Transaction not found         |
+| 4 - Hash not matched              |
+| 5 - There is some technical error |
 
