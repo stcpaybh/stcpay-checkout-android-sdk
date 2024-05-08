@@ -163,7 +163,10 @@ e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data st
 ```
 {
     "response-code": 0,
-    "response-message": "Paid"
+    "response-message": "Paid",
+    "data": {
+        "transaction-id": <stc pay transaction id (Long)>
+    }
 }
 ```
 
