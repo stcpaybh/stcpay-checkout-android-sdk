@@ -180,6 +180,7 @@ e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data st
 | 3 - Transaction not found         |
 | 4 - Hash not matched              |
 | 5 - There is some technical error |
+| 6 - Refunded                      |
 
 ## Refund API
 
