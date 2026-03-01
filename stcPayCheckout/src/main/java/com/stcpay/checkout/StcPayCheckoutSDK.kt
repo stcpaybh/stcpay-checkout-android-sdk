@@ -68,7 +68,9 @@ object StcPayCheckoutSDK {
 
         if (intent != null) {
             intent.apply {
-                flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+                flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra(MERCHANT_ID, stcPayCheckoutSDKConfiguration.merchantId)
                 putExtra(EXTERNAL_REF_ID, stcPayCheckoutSDKConfiguration.externalRefId)
                 putExtra(AMOUNT, stcPayCheckoutSDKConfiguration.amount)

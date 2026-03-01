@@ -163,7 +163,10 @@ e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data st
 ```
 {
     "response-code": 0,
-    "response-message": "Paid"
+    "response-message": "Paid",
+    "data": {
+        "transaction-id": <stc pay transaction id (Long)>
+    }
 }
 ```
 
@@ -177,4 +180,47 @@ e.g. Your merchant ID is **1234** & Transaction ID is **5678**, then the data st
 | 3 - Transaction not found         |
 | 4 - Hash not matched              |
 | 5 - There is some technical error |
+| 6 - Refunded                      |
+
+## Refund API
+
+Merchants can use the following API to refund the transaction, if applicable.
+
+
+##### Endpoint (POST)
+#### WILL SHARE WHEN REQUIRED
+
+##### Request
+
+```
+{
+  "merchant-id": "<your merchant ID>",
+  "external-transaction-id": <exteranl transaction ID of a merchant>
+}
+```
+##### Header
+
+client-secret : <**API secret** provided to you>
+client-id : <**Client ID** provided to you>
+
+
+##### Response
+
+```
+{
+    "response-code": 0,
+    "response-message": "Amount is refunded to customer successfully."
+}
+```
+
+#### Response Code possible values
+
+| Values                                                                                                 | 
+|:-------------------------------------------------------------------------------------------------------|
+| 0 - Amount is refunded to customer successfully.                                                       |
+| 1 - Unable to refund the amount due to some technical error. Please try again later                    |
+| 5 - Unable to refund                                                                                   |
+| 4 - Amount is not paid on stcpay                                                                       |
+| 3 - Transaction not found                                                                              |
+| 2 - Merchant not found                                                                                 |
 
